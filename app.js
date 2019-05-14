@@ -1,23 +1,20 @@
 window.addEventListener('load', () => {
 	const iconContainer   = document.querySelector('#icon'),
 		  description     = document.querySelector('#weather-description'),
-		  temperature     = document.querySelector('#temperature'),
+		  temperatureValue= document.querySelector('#temperature-degrees'),
 		  temperatureSpan = document.querySelector('#temperature-container span'),
-		  windSpeed	      = document.querySelector('#wind-speed'),
+		  windSpeedValue  = document.querySelector('#wind-speed'),
 		  windSpan        = document.querySelector('#wind-humidity-container span'),
-		  humidity        = document.querySelector('#humidity'),
-		  location        = document.querySelector('#location'),
-		  dateTime        = document.querySelector('#date-time');
+		  humidityValue   = document.querySelector('#humidity'),
+		  location        = document.querySelector('#location');
 
-
-	console.log(description, temperature, windSpeed, humidity, location);
 	if(navigator.geolocation){
 		navigator.geolocation.getCurrentPosition(position => {
 			const lat = position.coords.latitude;
 			const long = position.coords.longitude;
 
 			const proxy = 'https://cors-anywhere.herokuapp.com/';
-			const api =`${proxy}https://api.darksky.net/forecast/cb56d9920605d7bf2164d926ce8798c8/${lat},${long}`;
+			const api =`${proxy}https://api.darksky.net/forecast/[API_KEY]/${lat},${long}`;
 		
 			fetch(api)
 			.then(response => {
@@ -25,20 +22,41 @@ window.addEventListener('load', () => {
 			})
 			.then(data => {
 				console.log(data);
-
 				const {temperature, summary, icon, humidity, windSpeed} = data.currently
 				description.textContent = summary;
-				temperature.textContent = temperature;
-				windSpeed.textContent = windSpeed;
-				humidity.textContent = humidity;
+				temperatureValue.textContent = ((temperature-32)*5/9).toFixed(2);
+				windSpeedValue.textContent = (windSpeed * 1.6093).toFixed(2);
+				humidityValue.textContent = `${humidity * 100} %`;
 				location.textContent = data.timezone;
-				console.log(temperature, windSpeed, humidity);
-
+				
 				//Set Icon
 				setIcons(icon, iconContainer);
+
+				//Change C to F and vice-versa
+				temperatureSpan.addEventListener('click', ()=> {
+					if(temperatureSpan.textContent === "C"){
+						temperatureSpan.textContent = "F";
+						temperatureValue.textContent = temperature;
+					} else {
+						temperatureSpan.textContent = "C";
+						temperatureValue.textContent = ((temperature-32)*5/9).toFixed(2);
+					}
+				});
+
+				//Change kph to mph and vice-versa
+				windSpan.addEventListener('click', ()=> {
+					if(windSpan.textContent === "kph"){
+						windSpan.textContent = "mph";
+						windSpeedValue.textContent = windSpeed;
+					} else {
+						windSpan.textContent = "kph";
+						windSpeedValue.textContent = (windSpeed * 1.6093).toFixed(2);
+					}
+				});
+
 			});
 		});
-	}
+	} 
 
 	function setIcons(icon, iconID){
 		const skycons = new Skycons({"color": "white"});

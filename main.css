@@ -13,3 +13,58 @@ body {
 	color: white;
 	font-family: sans-serif;
 }
+
+#weather-container {
+	display: flex;
+	flex-direction: column;
+}
+
+#temperature-container,
+#wind-humidity-container {
+	display: flex;
+}
+
+#temperature-container{
+	cursor: pointer;
+}
+
+#wind-humidity-container {
+	width: 40%;
+}
+
+#wind-section{
+	display: flex;
+	cursor: pointer;
+	flex-direction: column;
+}
+
+#humidity-section {
+	display: flex;
+	flex-direction: column;
+}
+
+#wind-section div {
+	display: flex;
+}
+
+#humidity div {
+	display: flex;
+}
+
+#temperature-container span,
+#wind-humidity-container span {
+	margin-left: 10px;
+	font-size: 20px;
+}
+
+h1 {
+	font-size: 40px;
+}
+
+h2 {
+	font-size: 30px;
+}
+
+h3 {
+	font-size: 20px;
+}
